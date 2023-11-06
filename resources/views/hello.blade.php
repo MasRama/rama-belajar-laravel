@@ -9,6 +9,8 @@
     <h1>Hello World !</h1>
     <h3>Fatqan Ramadhiansyah</h3>
     <h3>ryushineo@gmail.com</h3>
+    <h3>Teknik Informatika</h3>
+    <h3>Universitas PGRI Kanjuruhan Malang</h3>
     <br>
     <h3>SIB PT Arkatama Multisolusindo</h3>
     <p>Belajar Laravel</p>
