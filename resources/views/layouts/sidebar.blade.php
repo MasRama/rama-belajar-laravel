@@ -44,7 +44,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="dashboard.php" class="nav-link active">
+                <a href="/" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Menu Index</p>
                 </a>
@@ -52,7 +52,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="newproduct.php" class="nav-link">
+            <a href="/produk" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Product
