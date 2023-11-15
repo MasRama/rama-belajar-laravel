@@ -1,3 +1,7 @@
+<?php 
+setlocale(LC_TIME, 'id_ID.utf8'); 
+date_default_timezone_set('Asia/Jakarta');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,4 +1,4 @@
-  <!-- Navbar -->
+<!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -7,7 +7,7 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a class="nav-link" id="datecustom">
-          <!-- date hari -->
+          {{ strftime('%A, %d %B %Y %H:%M:%S') }}
         </a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
