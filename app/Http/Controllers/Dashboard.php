@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Products;
+use App\Models\Category;
+
 class Dashboard extends Controller
 {
     /**
@@ -17,49 +20,47 @@ class Dashboard extends Controller
 
     public function produk()
     {
-        $products = DB::table('products')
-        ->join('product_categories', 'products.category_id', '=', 'product_categories.id')
-        ->select('products.*', 'product_categories.category_name')
-        ->get();
+        $products = Products::join('product_categories', 'products.category_id', '=', 'product_categories.id')
+            ->select('products.*', 'product_categories.category_name')
+            ->get();
 
-        // Mengirim data produk dan kategori ke dalam view
+        // kirim data produk ke view
         return view('produk', ['products' => $products]);
     }
 
     public function buatproduk()
     {
-        $categories = DB::table('product_categories')->get();
+        $categories = Category::all();
 
         return view('tambahproduk', ['categories' => $categories]);
     }
 
     public function hapusproduk($id)
     {
-        $product = DB::table('products')->where('id', $id)->first();
+        $product = Products::find($id);
 
         if (!$product) {
             return redirect()->back();
         }
 
-        DB::table('products')->where('id', $id)->delete();
+        $product->delete();
 
         return redirect()->back();
     }
 
     public function editproduk($id)
     {
-        $product = DB::table('products')
-            ->join('product_categories', 'products.category_id', '=', 'product_categories.id')
+        $product = Products::join('product_categories', 'products.category_id', '=', 'product_categories.id')
             ->select('products.*', 'product_categories.category_name')
             ->where('products.id', $id)
             ->first();
-
-        $categories = DB::table('product_categories')->get();
-
+    
+        $categories = Category::all();
+    
         if (!$product) {
             return redirect()->back();
         }
-
+    
         return view('editproduk', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -76,15 +77,15 @@ class Dashboard extends Controller
         }
 
         // Insert data produk baru ke dalam database
-        DB::table('products')->insert([
-            'product_name' => $request->nama,
-            'product_code' => $request->kode,
-            'price' => $request->harga,
-            'stock' => $request->stok,
-            'category_id' => $request->kategori,
-            'description' => $request->desc,
-            'image' => json_encode($imagePaths)
-        ]);
+        $product = new Products;
+        $product->product_name = $request->nama;
+        $product->product_code = $request->kode;
+        $product->price = $request->harga;
+        $product->stock = $request->stok;
+        $product->category_id = $request->kategori;
+        $product->description = $request->desc;
+        $product->image = json_encode($imagePaths);
+        $product->save();
 
         // Redirect ke halaman produk
         return redirect('/produk');
@@ -92,7 +93,6 @@ class Dashboard extends Controller
 
     public function putproduk(Request $request, $id)
     {
-        // Upload gambar produk
         $imagePaths = [];
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $image) {
@@ -101,20 +101,22 @@ class Dashboard extends Controller
                 $imagePaths[] = 'images/' . $imageName;
             }
         }
-
+    
         // Update data produk ke dalam database
-        DB::table('products')
-            ->where('id', $id)
-            ->update([
-                'product_name' => $request->nama,
-                'product_code' => $request->kode,
-                'price' => $request->harga,
-                'stock' => $request->stok,
-                'category_id' => $request->kategori,
-                'description' => $request->desc,
-                'image' => json_encode($imagePaths)
-            ]);
-
+        $product = Products::find($id);
+        if (!$product) {
+            return redirect()->back();
+        }
+    
+        $product->product_name = $request->nama;
+        $product->product_code = $request->kode;
+        $product->price = $request->harga;
+        $product->stock = $request->stok;
+        $product->category_id = $request->kategori;
+        $product->description = $request->desc;
+        $product->image = json_encode($imagePaths);
+        $product->save();
+    
         // Redirect ke halaman produk
         return redirect('/produk');
     }
