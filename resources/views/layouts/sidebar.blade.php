@@ -61,7 +61,8 @@
           </li>
           <li class="nav-item">
             
-            <form action="dashboard.php" method="post">
+            <form action="/logout" method="post">
+              @csrf
                 <input type="hidden" name="logout" value="true">
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>
