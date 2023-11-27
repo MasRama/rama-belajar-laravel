@@ -46,7 +46,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{ url('/produk/' . $product->id) }}" method="post">
+              <form action="{{ url('/produk/' . $product->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card-body">
@@ -82,6 +82,10 @@
                         <label for="desc">Deskripsi Produk</label>
                         <input type="text" value="{{ $product->description }}" name="desc" class="form-control" id="desc" placeholder="Masukkan Deskripsi Produk">
                     </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Gambar Produk</label>
+                      <input type="file" name="upload[]" class="form-control" id="upload" multiple>
+                  </div>
                 </div>
                 <div class="card-footer">
                     <input type="submit" name="submit" class="btn btn-primary">

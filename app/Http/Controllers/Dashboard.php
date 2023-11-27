@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Products;
 use App\Models\Category;
 
+use Illuminate\Support\Facades\Storage;
+
 class Dashboard extends Controller
 {
     /**
@@ -39,10 +41,18 @@ class Dashboard extends Controller
     {
         $product = Products::find($id);
 
+        // Hapus image
+        $oldImagePaths = json_decode($product->image);
+        foreach ($oldImagePaths as $path) {
+            if (file_exists(public_path($path))) {
+                unlink(public_path($path));
+            }
+        }
+
         if (!$product) {
             return redirect()->back()->with('error', 'Produk Tidak ditemukan');
         }
-        
+
         $product->delete();
 
         return redirect()->back()->with('success', 'Produk Berhasil dihapus');
@@ -103,7 +113,6 @@ class Dashboard extends Controller
 
     public function putproduk(Request $request, $id)
     {
-
         $request->validate([
             'nama' => 'required|max:255',
             'kode' => 'required|max:255',
@@ -111,24 +120,33 @@ class Dashboard extends Controller
             'stok' => 'required|numeric',
             'kategori' => 'required|numeric',
             'desc' => 'required',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'upload.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        $product = Products::find($id);
+        if (!$product) {
+            return redirect()->back();
+        }
+
+        // Hapus gambar lama
+        $oldImagePaths = json_decode($product->image);
+        foreach ($oldImagePaths as $path) {
+            if (file_exists(public_path($path))) {
+                unlink(public_path($path));
+            }
+        }
+
+        // Upload gambar
         $imagePaths = [];
-        if ($request->hasFile('gambar')) {
-            foreach ($request->file('gambar') as $image) {
+        if ($request->hasFile('upload')) {
+            foreach ($request->file('upload') as $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('images'), $imageName);
                 $imagePaths[] = 'images/' . $imageName;
             }
         }
 
-        // Update data produk ke dalam database
-        $product = Products::find($id);
-        if (!$product) {
-            return redirect()->back();
-        }
-
+        // Update 
         $product->product_name = $request->nama;
         $product->product_code = $request->kode;
         $product->price = $request->harga;
@@ -138,7 +156,6 @@ class Dashboard extends Controller
         $product->image = json_encode($imagePaths);
         $product->save();
 
-        // Redirect ke halaman produk
         return redirect('/produk');
     }
 }
