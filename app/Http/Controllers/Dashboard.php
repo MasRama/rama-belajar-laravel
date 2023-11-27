@@ -40,12 +40,12 @@ class Dashboard extends Controller
         $product = Products::find($id);
 
         if (!$product) {
-            return redirect()->back();
+            return redirect()->back()->with('error', 'Produk Tidak ditemukan');
         }
-
+        
         $product->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Produk Berhasil dihapus');
     }
 
     public function editproduk($id)
@@ -54,18 +54,28 @@ class Dashboard extends Controller
             ->select('products.*', 'product_categories.category_name')
             ->where('products.id', $id)
             ->first();
-    
+
         $categories = Category::all();
-    
+
         if (!$product) {
             return redirect()->back();
         }
-    
+
         return view('editproduk', ['product' => $product, 'categories' => $categories]);
     }
 
     public function tambahproduk(Request $request)
     {
+
+        $request->validate([
+            'nama' => 'required|max:255',
+            'kode' => 'required|max:255',
+            'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
+            'kategori' => 'required|numeric',
+            'desc' => 'required',
+            'upload.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
 
         $imagePaths = [];
         if ($request->hasFile('upload')) {
@@ -93,6 +103,17 @@ class Dashboard extends Controller
 
     public function putproduk(Request $request, $id)
     {
+
+        $request->validate([
+            'nama' => 'required|max:255',
+            'kode' => 'required|max:255',
+            'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
+            'kategori' => 'required|numeric',
+            'desc' => 'required',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
         $imagePaths = [];
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $image) {
@@ -101,13 +122,13 @@ class Dashboard extends Controller
                 $imagePaths[] = 'images/' . $imageName;
             }
         }
-    
+
         // Update data produk ke dalam database
         $product = Products::find($id);
         if (!$product) {
             return redirect()->back();
         }
-    
+
         $product->product_name = $request->nama;
         $product->product_code = $request->kode;
         $product->price = $request->harga;
@@ -116,7 +137,7 @@ class Dashboard extends Controller
         $product->description = $request->desc;
         $product->image = json_encode($imagePaths);
         $product->save();
-    
+
         // Redirect ke halaman produk
         return redirect('/produk');
     }
