@@ -70,20 +70,10 @@ class Product extends Controller
     public function update(Request $request, $id)
     {
 
-        $validated = $request->validate([
-            'product_name' => 'required|max:255',
-            'product_code' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'category_id' => 'required|integer',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
-
         $product = Products::find($id);
 
         if ($product) {
-            $product->update($validated);
+            $product->update($request->all());
             return response()->json([
                 'message' => 'Produk Berhasil Diupdate',
                 'status' => true,
