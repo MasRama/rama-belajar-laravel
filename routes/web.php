@@ -33,5 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/register', [AuthController::class, 'regispage']);
 Route::post('/register', [AuthController::class, 'register']);
 
+
+
 //route to controller
 Route::get('/hello', [HelloWorld::class, 'index']);
