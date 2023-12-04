@@ -17,7 +17,52 @@ class Dashboard extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $totalProducts = Products::count();
+        $totalCategories = Category::count();
+        $totalPrice = Products::sum('price');
+        $totalStock = Products::sum('stock');
+
+        $nameCategories = Category::pluck('category_name');
+
+        $allCategory = Category::all();
+        $allProduct = Products::all();
+
+        //cek apakah ada kategori yang tidak memiliki produk, dan hitung jumlah produk per kategori
+        foreach ($allCategory as $category) {
+            $count = 0;
+            foreach ($allProduct as $product) {
+                if ($product->category_id == $category->id) {
+                    $count++;
+                }
+            }
+            $category->count = $count;
+        }
+        
+        //cek apakah ada kategori yang tidak memiliki produk, dan hitung total harga produk per kategori
+        foreach ($allCategory as $category) {
+            $total = 0;
+            foreach ($allProduct as $product) {
+                if ($product->category_id == $category->id) {
+                    $total += $product->price;
+                }
+            }
+            $category->total = $total;
+        }
+
+        //cek apakah ada kategori yang tidak memiliki produk, dan hitung total stok produk per kategori
+        foreach ($allCategory as $category) {
+            $total = 0;
+            foreach ($allProduct as $product) {
+                if ($product->category_id == $category->id) {
+                    $total += $product->stock;
+                }
+            }
+            $category->totalStock = $total;
+        }
+
+        //dd($allCategory);
+        
+        return view('dashboard', compact('totalProducts', 'totalCategories', 'totalPrice', 'totalStock', 'allCategory'));
     }
 
     public function produk()
