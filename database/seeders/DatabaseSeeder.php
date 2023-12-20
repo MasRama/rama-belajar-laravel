@@ -17,8 +17,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Rama',
             'email' => 'demo@demo.com',
             'password' => 'demo',
-            'phone_number' => '082131143178',
-            'username' => '082131143178',
+            'phone_number' => '0821',
+            'username' => '0821',
+            'roles' => 'user'
+        ], [
+            'name' => 'Fatqan',
+            'email' => 'fr@demo.com',
+            'password' => 'demo',
+            'phone_number' => '081',
+            'username' => '081',
+            'roles' => 'admin'
         ]);
     }
 }

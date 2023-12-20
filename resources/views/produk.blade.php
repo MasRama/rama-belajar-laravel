@@ -51,9 +51,11 @@
                 <div class="card">
                   <div class="card-header d-flex justify-content-end">                   
                     <h3 class="card-title col align-self-center">
-                    <a href="/produk/tambah" class="btn btn-primary col-sm-2">
-    <i class="nav-icon fas fa-plus mr-2"></i> Tambah Produk
-</a>
+                      @if (Auth::user()->roles === 'admin')
+                        <a href="/produk/tambah" class="btn btn-primary col-sm-2">
+                          <i class="nav-icon fas fa-plus mr-2"></i> Tambah Produk
+                        </a>
+                      @endif
                     </h3>
                     <!-- <div class="col justify-content-md-end"> -->
                    
@@ -92,7 +94,9 @@
                           <th>Kategori</th>
                           <th>Deskripsi</th>
                           <th>Image</th>
-                          <th>Aksi</th>
+                          @if (Auth::user()->roles === 'admin')
+                            <th>Aksi</th>
+                          @endif
                         </tr>
                       </thead>
                       <tbody>
@@ -123,7 +127,8 @@
               @endforeach
             @endif
         </td>
-        <td>
+        @if (Auth::user()->roles === 'admin')
+          <td>
             <div class="d-flex">
                 <a href="{{ url('produk', ['id' => $product->id]) }}" class="btn btn-info mr-2">
                     <i class="nav-icon fas fa-edit mr-2"></i>Edit
@@ -136,7 +141,8 @@
                     </button>
                 </form>
             </div>
-        </td>
+          </td>        
+        @endif
     </tr>
 
     @php

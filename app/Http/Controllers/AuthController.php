@@ -45,12 +45,15 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
+        //dd($request->all());
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'password' => $request->password,
             'phone_number' => $request->phone_number,
             'username' => $request->phone_number,
-            'password' => $request->password,
+            'roles' => $request->roles
         ]);
 
         return redirect('/login');

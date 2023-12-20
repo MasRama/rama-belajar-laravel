@@ -39,6 +39,18 @@
           </div>
         </div>
         <div class="input-group mb-3">
+          <select name="roles" class="form-control">
+            <option value="" disabled selected>Daftar sebagai</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
           <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
