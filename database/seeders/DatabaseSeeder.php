@@ -16,11 +16,13 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Rama',
             'email' => 'demo@demo.com',
-            'password' => 'demo',
+            'password' => 'demo', 
             'phone_number' => '0821',
             'username' => '0821',
             'roles' => 'user'
-        ], [
+        ]);
+        
+        User::create([
             'name' => 'Fatqan',
             'email' => 'fr@demo.com',
             'password' => 'demo',
